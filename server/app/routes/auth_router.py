@@ -27,7 +27,7 @@ async def register(payload: RegisterSchema, db: Session = Depends(get_db)):
     return AuthenticationService.register(payload, db)
 
 
-@router.post("/verify", status_code=200)
+@router.post("/verify")
 async def verify_user(request: Request, db: Session = Depends(get_db)):
     try:
         access_token = request.cookies.get("access_token")
