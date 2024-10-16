@@ -49,8 +49,7 @@ class AuthenticationService:
             db.commit()
             db.refresh(user)
             return {"message": "Account created."}
-        except SQLAlchemyError as e:
-            print(e)
+        except SQLAlchemyError:
             db.rollback()
             raise HTTPException(
                 status_code=500, detail="An unexpected server error occurred."
