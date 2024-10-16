@@ -21,7 +21,7 @@ import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 const Links = [
     { name: "Akış", path: "/feed" },
-    { name: "Profil", path: "/profile" },
+    { name: "Profil", path: "/feed/profile" },
     { name: "Ayarlar", path: "/feed/settings" }
 ];
 
@@ -73,7 +73,16 @@ export default function FeedLayout() {
 
     return (
         <Box bg={useColorModeValue("gray.50", "gray.900")} minH="100vh">
-            <Box bg={useColorModeValue("white", "gray.800")} px={4} boxShadow="sm">
+            <Box 
+                bg={useColorModeValue("white", "gray.800")} 
+                px={4} 
+                boxShadow="sm"
+                position="fixed"
+                top={0}
+                left={0}
+                right={0}
+                zIndex={1000}
+            >
                 <Flex h={14} alignItems={"center"} justifyContent={"space-between"}>
                     <IconButton
                         size={"sm"}
@@ -134,8 +143,10 @@ export default function FeedLayout() {
                 ) : null}
             </Box>
 
-            <Box p={4}>
-                <Outlet />
+            <Box py={20}>
+                <Box maxWidth="1200px" margin="auto">
+                    <Outlet />
+                </Box>
             </Box>
         </Box>
     );

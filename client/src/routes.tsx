@@ -10,6 +10,7 @@ const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgetPassword'));
 const FeedLayout = lazy(() => import('./layouts/FeedLayout'));
 const FeedIndexPaage = lazy(() => import('./pages/feed/Index'));
 const FeedSettingsPage = lazy(() => import('./pages/feed/Settings'));
+const FeedProfilePage = lazy(() => import('./pages/feed/Profile'));
 
 const routes = createBrowserRouter([
     {
@@ -34,6 +35,7 @@ const routes = createBrowserRouter([
         children: [
             { path: "", element: <FeedIndexPaage /> },
             { path: "settings", element: <FeedSettingsPage /> },
+            { path: "profile", element: <FeedProfilePage /> },
         ]
     }
 ]);
