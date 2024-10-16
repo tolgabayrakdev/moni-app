@@ -28,8 +28,6 @@ class AuthenticationService:
             refresh_token = helper.generate_refresh_token({"user_id": user.id})
 
             return {"access_token": access_token, "refresh_token": refresh_token}
-        except HTTPException as http_exc:
-            raise http_exc
         except SQLAlchemyError:
             raise HTTPException(
                 status_code=500, detail="An unexpected server error occurred."
