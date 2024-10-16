@@ -34,7 +34,7 @@ class AuthenticationService:
             )
 
     @staticmethod
-    def register(payload: RegisterSchema, db: Session):
+    def register(payload: RegisterSchema, db: Session) -> Dict[str, str]:
         try:
             existing_user_email = db.query(User).filter_by(email=payload.email).first()
             existing_user_username = db.query(User).filter_by(username=payload.username).first()
