@@ -5,6 +5,7 @@ const HomePage = lazy(() => import('./pages/Home'));
 
 const SignInPage = lazy(() => import('./pages/auth/SignIn'));
 const SignUpPage = lazy(() => import('./pages/auth/SignUp'));
+const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgetPassword'));
 
 
 const routes = createBrowserRouter([
@@ -19,6 +20,10 @@ const routes = createBrowserRouter([
     {
         path: "/sign-up",
         element: <SignUpPage />
+    },
+    {
+        path: "/forgot-password",
+        element: <ForgotPasswordPage />
     }
 ]);
 
