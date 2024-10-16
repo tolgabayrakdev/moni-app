@@ -36,9 +36,13 @@ class AuthenticationService:
     @staticmethod
     def register(payload: RegisterSchema, db: Session):
         try:
-            existing_user = db.query(User).filter_by(email=payload.email).first()
-            if existing_user:
-                raise HTTPException(status_code=400, detail="Email already registered!")
+            existing_user_email = db.query(User).filter_by(email=payload.email).first()
+            existing_user_username = db.query(User).filter_by(username=payload.username).first()
+            if existing_user_username:
+                raise HTTPException(status_code=400, detail="Username already taken!")
+
+            if existing_user_email:
+                raise HTTPException(status_code=400, detail="Email already taken!")
 
             user = User(
                 username=payload.username,
