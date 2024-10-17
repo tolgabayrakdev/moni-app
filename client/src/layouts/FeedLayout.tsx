@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     Flex,
@@ -16,8 +16,12 @@ import {
     VStack,
     useColorMode,
     Text,
+    useToast,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import AuthWrapper from "../wrappers/AuthWrapper";
+import Loading from "../components/Loading";
+
 
 const Links = [
     { name: "Akış", path: "/feed" },
@@ -50,32 +54,82 @@ const NavLink = ({ children, path }: { children: React.ReactNode, path: string }
     );
 };
 
-export default function FeedLayout() {
+function FeedLayout() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
     const location = useLocation();
     const { colorMode, toggleColorMode } = useColorMode();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const toast = useToast();
+    const [userName, setUserName] = useState("");
+    const [userEmail, setUserEmail] = useState("");
 
-    // Sayfa değiştiğinde hamburger menüyü kapat
     useEffect(() => {
         onClose();
     }, [location.pathname]);
 
-    // Örnek kullanıcı bilgileri (gerçek uygulamada bu bilgiler bir API'den veya state'ten gelecektir)
-    const userEmail = "ornek@email.com";
-    const username = "OrnekKullanici";
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/auth/verify", {
+                    method: "POST",
+                    credentials: "include",
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    
+                    setUserName(data.user.username);
+                    setUserEmail(data.user.email);
+                } else {
+                    throw new Error("Kullanıcı bilgileri alınamadı");
+                }
+            } catch (error) {
+                console.error("Kullanıcı bilgileri alınırken hata oluştu:", error);
+                toast({
+                    title: "Hata",
+                    description: "Kullanıcı bilgileri alınamadı. Lütfen tekrar giriş yapın.",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+                navigate("/sign-in");
+            }
+        };
 
-    const handleLogout = () => {
-        // Burada çıkış işlemlerini gerçekleştirin
-        // Örneğin: localStorage.removeItem("token");
-        navigate("/signin");
+        fetchUserInfo();
+    },[])
+
+    const handleLogout = async () => {
+        try {
+            setIsLoggingOut(true);
+            const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+            if (response.status === 200) {
+                setTimeout(() => {
+                    setIsLoggingOut(false);
+                    navigate("/sign-in");
+                }, 500);
+            }
+        } catch (error) {
+            setIsLoggingOut(false);
+            // Hata yönetimi burada yapılabilir
+        }
     };
+    if (isLoggingOut) {
+        return (
+            <Loading />
+        );
+    }
+
 
     return (
         <Box bg={useColorModeValue("gray.50", "gray.900")} minH="100vh">
-            <Box 
-                bg={useColorModeValue("white", "gray.800")} 
-                px={4} 
+            <Box
+                bg={useColorModeValue("white", "gray.800")}
+                px={4}
                 boxShadow="sm"
                 position="fixed"
                 top={0}
@@ -102,7 +156,7 @@ export default function FeedLayout() {
                     <Flex alignItems={"center"}>
                         <HStack spacing={3}>
                             <VStack spacing={0} alignItems="flex-end" display={{ base: "none", md: "flex" }}>
-                                <Text fontWeight="medium" fontSize="xs">{username}</Text>
+                                <Text fontWeight="medium" fontSize="xs">{userName}</Text>
                                 <Text color="gray.500" fontSize="xs">{userEmail}</Text>
                             </VStack>
                             <Menu>
@@ -144,10 +198,12 @@ export default function FeedLayout() {
             </Box>
 
             <Box py={20}>
-                <Box maxWidth="1200px" margin="auto">
+                <Box maxWidth="1200px" p={3}>
                     <Outlet />
                 </Box>
             </Box>
         </Box>
     );
 }
+
+export default AuthWrapper(FeedLayout);

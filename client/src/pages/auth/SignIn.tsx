@@ -38,7 +38,7 @@ export default function SignIn() {
                     duration: 3000,
                     isClosable: true,
                   });
-                  setTimeout(() => navigate('/dashboard'), 500);
+                  setTimeout(() => navigate('/feed'), 500);
                 } else {
                   throw new Error('Giriş başarısız');
                 }
