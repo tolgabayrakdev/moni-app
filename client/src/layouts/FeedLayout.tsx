@@ -169,6 +169,7 @@ function FeedLayout() {
                                 >
                                     <Avatar
                                     bg="blue.300"
+                                    textColor={"white"}
                                     name={userName}
                                         size={"sm"}
                                         src={

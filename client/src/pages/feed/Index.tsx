@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
 
+
 export default function Index() {
   return (
-    <Box ml={8}>
-      Index page
+    <Box maxWidth="900px" margin="auto" mt={8}>
     </Box>
-  )
+  );
 }

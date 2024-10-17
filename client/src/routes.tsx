@@ -2,6 +2,8 @@ import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 const HomePage = lazy(() => import('./pages/Home'));
+const NotFoundPage = lazy(() => import('./pages/error/NotFound'));
+
 
 const SignInPage = lazy(() => import('./pages/auth/SignIn'));
 const SignUpPage = lazy(() => import('./pages/auth/SignUp'));
@@ -16,6 +18,10 @@ const routes = createBrowserRouter([
     {
         path: "/",
         element: <HomePage />
+    },
+    {
+        path: "*",
+        element: <NotFoundPage />
     },
     {
         path: "/sign-in",
