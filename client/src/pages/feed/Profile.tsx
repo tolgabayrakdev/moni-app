@@ -22,6 +22,7 @@ import {
   AlertDialogOverlay,
   useToast,
 } from "@chakra-ui/react";
+import Loading from "../../components/Loading";
 
 export default function Profile() {
   const bgColor = useColorModeValue("white", "gray.700");
@@ -35,12 +36,14 @@ export default function Profile() {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const toast = useToast();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchUserInfo();
   }, []);
 
   const fetchUserInfo = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/auth/verify", {
         method: "POST",
@@ -62,6 +65,8 @@ export default function Profile() {
         duration: 5000,
         isClosable: true,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -183,6 +188,12 @@ export default function Profile() {
       onClose(); 
     }
   };
+
+  if (isLoading) {
+    return (
+     <Loading />
+    );
+  }
 
   return (
     <Box maxW="600px" ml={8}>
