@@ -21,8 +21,26 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   useToast,
+  Skeleton,
+  SkeletonText,
 } from "@chakra-ui/react";
-import Loading from "../../components/Loading";
+
+const ProfileSkeleton = () => {
+  const bgColor = useColorModeValue("white", "gray.700");
+  return (
+    <Box maxW="600px" ml={8}>
+      <VStack spacing={6} align="stretch">
+        {[1, 2, 3].map((index) => (
+          <Box key={index} bg={bgColor} p={4} borderRadius="md" boxShadow="sm">
+            <Skeleton height="20px" width="150px" mb={4} />
+            <SkeletonText mt="4" noOfLines={3} spacing="4" />
+            <Skeleton height="32px" width="100px" mt={4} />
+          </Box>
+        ))}
+      </VStack>
+    </Box>
+  );
+};
 
 export default function Profile() {
   const bgColor = useColorModeValue("white", "gray.700");
@@ -190,9 +208,7 @@ export default function Profile() {
   };
 
   if (isLoading) {
-    return (
-     <Loading />
-    );
+    return <ProfileSkeleton />;
   }
 
   return (
